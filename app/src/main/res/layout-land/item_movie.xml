@@ -26,7 +26,8 @@
         android:layout_toRightOf="@+id/ivMovieImage"
         android:layout_toEndOf="@+id/ivMovieImage"
         android:layout_marginLeft="14dp"
-        android:layout_marginStart="14dp" />
+        android:layout_marginStart="14dp"
+        android:textColor="@android:color/white" />
 
     <TextView
         android:text="TextView"
@@ -37,5 +38,6 @@
         android:layout_marginTop="21dp"
         android:layout_below="@+id/tvTitle"
         android:layout_alignLeft="@+id/tvTitle"
-        android:layout_alignStart="@+id/tvTitle" />
+        android:layout_alignStart="@+id/tvTitle"
+        android:textColor="@android:color/darker_gray" />
 </RelativeLayout>
