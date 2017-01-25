@@ -3,7 +3,6 @@ package com.codepath.flixter.adapters;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,8 +62,7 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
         } else {
             imgPath = movie.getPosterPath();
         }
-        Log.d("imgPath: ", imgPath);
-        Picasso.with(getContext()).load(imgPath).transform(new RoundedCornersTransformation(30, 30)).placeholder(R.drawable.film).into(viewHolder.ivImage);
+        Picasso.with(getContext()).load(imgPath).transform(new RoundedCornersTransformation(30, 30)).placeholder(R.drawable.movie_night).into(viewHolder.ivImage);
         return convertView;
     }
 }
