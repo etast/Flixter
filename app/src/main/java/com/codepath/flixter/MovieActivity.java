@@ -33,12 +33,7 @@ public class MovieActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie);
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                                                @Override
-                                                public void onRefresh() {
-                                                    fetchMovieData();
-                                                }
-                                            }
+        swipeContainer.setOnRefreshListener(() -> fetchMovieData()
 
         );
         lvItems = (ListView) findViewById(R.id.lvMovies);
@@ -57,29 +52,28 @@ public class MovieActivity extends AppCompatActivity {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                e.printStackTrace();
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-
+                if (!response.isSuccessful()) {
+                    throw new IOException("Unexpected code " + response);
+                }
                 final String ResponseData = response.body().string();
-                    MovieActivity.this.runOnUiThread(new Runnable() {
-                                                         @Override
-                                                         public void run() {
-                                                             JSONArray movieJsonResults = null;
-                                                             try {
-                                                                 JSONObject json = new JSONObject(ResponseData);
-                                                                 movieJsonResults = json.getJSONArray("results");
-                                                                 movies.clear();
-                                                                 movies.addAll(Movie.fromJSONArray(movieJsonResults));
-                                                                 movieAdapter.notifyDataSetChanged();
-                                                                 swipeContainer.setRefreshing(false);
-                                                             } catch (JSONException e) {
-                                                                 e.printStackTrace();
-                                                             }
-                                                         }
-                                                     }
+                    MovieActivity.this.runOnUiThread(() -> {
+                        JSONArray movieJsonResults = null;
+                        try {
+                            JSONObject json = new JSONObject(ResponseData);
+                            movieJsonResults = json.getJSONArray("results");
+                            movies.clear();
+                            movies.addAll(Movie.fromJSONArray(movieJsonResults));
+                            movieAdapter.notifyDataSetChanged();
+                            swipeContainer.setRefreshing(false);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     );
             }
         });
