@@ -2,7 +2,7 @@
 
 **Flixter** shows the latest movies currently playing in theaters. The app utilizes the Movie Database API to display images and basic information about these movies to the user.
 
-Time spent: **5.0** hours spent in total
+Time spent: **7.0** hours spent in total
 
 ## User Stories
 
@@ -32,7 +32,7 @@ The following **stretch** features are implemented:
 * [ ] Uses [retrolambda expressions](http://guides.codepath.com/android/Lambda-Expressions) to cleanup event handling blocks.
 * [ ] Apply the popular [Butterknife annotation library](http://guides.codepath.com/android/Reducing-View-Boilerplate-with-Butterknife) to reduce boilerplate code.
 * [x] Apply rounded corners for the poster or background images using [Picasso transformations](https://guides.codepath.com/android/Displaying-Images-with-the-Picasso-Library#other-transformations)
-* [ ] Replaced android-async-http network client with the popular lower-level  [OkHttp](http://guides.codepath.com/android/Using-OkHttp) networking library.
+* [x] Replaced android-async-http network client with the popular lower-level  [OkHttp](http://guides.codepath.com/android/Using-OkHttp) networking library.
 * [ ] Replaced all icon drawables and other static image assets with [vector drawables](http://guides.codepath.com/android/Drawables#vector-drawables) where appropriate.
 
 The following **additional** features are implemented:

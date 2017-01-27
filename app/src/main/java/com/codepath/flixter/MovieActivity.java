@@ -7,16 +7,19 @@ import android.widget.ListView;
 
 import com.codepath.flixter.adapters.MovieArrayAdapter;
 import com.codepath.flixter.models.Movie;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
-import cz.msebera.android.httpclient.Header;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class MovieActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeContainer;
@@ -47,25 +50,37 @@ public class MovieActivity extends AppCompatActivity {
 
     private void fetchMovieData () {
         String url = "https://api.themoviedb.org/3/movie/now_playing?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed";
-        AsyncHttpClient client = new AsyncHttpClient();
-        client.get(url, new JsonHttpResponseHandler(){
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                JSONArray movieJsonResults = null;
-                try {
-                    movieJsonResults = response.getJSONArray("results");
-                    movies.clear();
-                    movies.addAll(Movie.fromJSONArray(movieJsonResults));
-                    movieAdapter.notifyDataSetChanged();
-                    swipeContainer.setRefreshing(false);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+            public void onFailure(Call call, IOException e) {
+
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
+            public void onResponse(Call call, Response response) throws IOException {
+
+                final String ResponseData = response.body().string();
+                    MovieActivity.this.runOnUiThread(new Runnable() {
+                                                         @Override
+                                                         public void run() {
+                                                             JSONArray movieJsonResults = null;
+                                                             try {
+                                                                 JSONObject json = new JSONObject(ResponseData);
+                                                                 movieJsonResults = json.getJSONArray("results");
+                                                                 movies.clear();
+                                                                 movies.addAll(Movie.fromJSONArray(movieJsonResults));
+                                                                 movieAdapter.notifyDataSetChanged();
+                                                                 swipeContainer.setRefreshing(false);
+                                                             } catch (JSONException e) {
+                                                                 e.printStackTrace();
+                                                             }
+                                                         }
+                                                     }
+                    );
             }
         });
     }
